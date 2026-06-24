@@ -2,6 +2,12 @@
 
 تطبيق Flutter للتحكم المباشر في روبوت الرسم Spidy Draw عن طريق ESP32 فقط.
 
+
+## حالة نسخة التسليم
+
+تم إصلاح خطأ Dashboard الخاص بـ `totalLines` وتم تحديث اختبار البداية.
+قبل التسليم شغل: `flutter clean`, `flutter pub get`, `flutter analyze`, ثم `flutter run`.
+
 ## الفكرة
 
 التطبيق لا يحتاج Python server في التشغيل اليومي.

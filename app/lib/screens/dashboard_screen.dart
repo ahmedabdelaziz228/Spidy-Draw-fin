@@ -639,6 +639,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget _buildGraduationHero() {
     final readyToGenerate = _imageBytes != null;
     final readyToUpload = _gcode.trim().isNotEmpty;
+    final totalLines = _gcodeLines.length;
     final stateColor = !_online
         ? AppTheme.danger
         : _status.isReady

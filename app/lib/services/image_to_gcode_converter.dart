@@ -309,6 +309,16 @@ List<_VectorPath> _extractContourPaths(
       points = _removeRedundantPoints(points, minDistance: _minPointDistanceMm);
       if (points.length < 2) continue;
 
+      // Match the old Python/OpenCV output more closely:
+      // OpenCV contours usually start at the first top-left boundary pixel found
+      // during image scanning, then follow a consistent clockwise contour order
+      // in image coordinates. Our pure-Dart tracer may discover the same contour
+      // in the opposite direction, which still previews correctly but produces a
+      // different G-code order. Normalizing the closed path here keeps the new
+      // mobile output aligned with the old working G-code: same start region and
+      // same direction, while preserving the user-defined Safe Area mapping.
+      points = _normalizeClosedContourLikeOpenCv(points);
+
       final path = _VectorPath(points: points, closed: true)..calculateLength();
       if (path.lengthMm < _minPathLengthMm) continue;
       paths.add(path);
@@ -514,6 +524,69 @@ List<_Point> _removeRedundantPoints(List<_Point> points, {required double minDis
     output.removeLast();
   }
   return output;
+}
+
+List<_Point> _normalizeClosedContourLikeOpenCv(List<_Point> points) {
+  if (points.length < 3) return points;
+
+  var normalized = List<_Point>.from(points);
+
+  // In the old Python/OpenCV pipeline the produced face contours had a
+  // negative signed area in image/workspace coordinates (Y grows downward).
+  // If the Dart tracer gives the opposite direction, reverse it. This turns
+  // outputs like:
+  //   top-left -> top-right -> right side -> bottom ...
+  // back into the old style:
+  //   top-left -> left side -> bottom -> right side ...
+  if (_signedArea(normalized) > 0) {
+    normalized = normalized.reversed.toList(growable: false);
+  }
+
+  final startIndex = _topLeftContourStartIndex(normalized);
+  if (startIndex > 0) {
+    normalized = _rotatePoints(normalized, startIndex);
+  }
+
+  return normalized;
+}
+
+double _signedArea(List<_Point> points) {
+  if (points.length < 3) return 0;
+  var sum = 0.0;
+  for (var i = 0; i < points.length; i++) {
+    final a = points[i];
+    final b = points[(i + 1) % points.length];
+    sum += (a.x * b.y) - (b.x * a.y);
+  }
+  return sum / 2.0;
+}
+
+int _topLeftContourStartIndex(List<_Point> points) {
+  var best = 0;
+  const yToleranceMm = 1.25;
+
+  for (var i = 1; i < points.length; i++) {
+    final candidate = points[i];
+    final current = points[best];
+
+    final clearlyHigher = candidate.y < current.y - yToleranceMm;
+    final sameTopBand = (candidate.y - current.y).abs() <= yToleranceMm;
+    if (clearlyHigher || (sameTopBand && candidate.x < current.x)) {
+      best = i;
+    }
+  }
+
+  return best;
+}
+
+List<_Point> _rotatePoints(List<_Point> points, int startIndex) {
+  if (points.isEmpty || startIndex <= 0 || startIndex >= points.length) {
+    return points;
+  }
+  return [
+    ...points.sublist(startIndex),
+    ...points.sublist(0, startIndex),
+  ];
 }
 
 List<_Point> _douglasPeucker(List<_Point> points, double epsilon) {
