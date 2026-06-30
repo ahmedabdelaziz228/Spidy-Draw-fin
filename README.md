@@ -229,7 +229,51 @@ app/build/app/outputs/flutter-apk/app-release.apk
 
 ---
 
-## 8. Uploading the Firmware to ESP32
+## 8. Optional Python Development Setup
+
+The main mobile workflow generates G-code inside the Flutter application and communicates directly with the ESP32. The Python tools are included as an optional development environment for testing image-processing pipelines, comparing output, and validating G-code generation during research or debugging.
+
+### Requirements
+
+- Python 3.
+- OpenCV and NumPy from `requirements.txt`.
+
+From the Python tools directory, install the required packages:
+
+```bash
+cd device_code/python_tools
+pip install -r requirements.txt
+```
+
+Start the local bridge server:
+
+```bash
+python bridge_server.py
+```
+
+Open the local development interface:
+
+```text
+http://127.0.0.1:8080
+```
+
+The bridge server provides the following development endpoints:
+
+| Endpoint | Purpose |
+|---|---|
+| `GET /` | Opens the local image-processing interface |
+| `GET /api/presets` | Returns available processing presets |
+| `POST /api/process-image` | Processes an image into drawable paths |
+| `GET /api/preview` | Returns preview path data |
+| `GET /api/validate-paths` | Returns path validation information |
+| `POST /api/generate-gcode` | Generates G-code from processed paths |
+| `POST /api/upload-to-esp` | Uploads generated G-code to an ESP32 URL |
+
+This optional environment is useful for development and validation, while the submitted mobile application remains capable of running directly with the ESP32 without requiring the Python server.
+
+---
+
+## 9. Uploading the Firmware to ESP32
 
 From the project root:
 
@@ -260,7 +304,7 @@ AP_PASSWORD = "robot123"
 
 ---
 
-## 9. ESP32 Communication Endpoints
+## 10. ESP32 Communication Endpoints
 
 The Flutter application communicates with the ESP32 using one base URL.
 
@@ -299,7 +343,7 @@ GET  /move?angle=...&repeats=...
 
 ---
 
-## 10. Safe Drawing Area
+## 11. Safe Drawing Area
 
 The default logical paper workspace is A4:
 
@@ -321,7 +365,7 @@ The Safe Area allows the user to define the drawing boundaries inside the paper.
 
 ---
 
-## 11. Image-to-G-code Pipeline
+## 12. Image-to-G-code Pipeline
 
 The mobile application converts the selected image into ESP-compatible G-code using a contour-based workflow:
 
@@ -361,7 +405,7 @@ Command meaning:
 
 ---
 
-## 12. Hardware Components
+## 13. Hardware Components
 
 The system is built around:
 
@@ -380,7 +424,7 @@ The robot uses cable-driven movement. The firmware coordinates motor motion to m
 
 ---
 
-## 13. Demonstration Flow
+## 14. Demonstration Flow
 
 Recommended sequence for the graduation presentation:
 
@@ -399,7 +443,7 @@ Recommended sequence for the graduation presentation:
 
 ---
 
-## 14. Testing and Calibration
+## 15. Testing and Calibration
 
 Before presenting a complex drawing, test the robot in this order:
 
@@ -425,7 +469,7 @@ Recommended calibration checks:
 
 ---
 
-## 15. Troubleshooting
+## 16. Troubleshooting
 
 ### Flutter build fails
 
@@ -488,7 +532,7 @@ Review:
 
 ---
 
-## 16. Final Submission Checklist
+## 17. Final Submission Checklist
 
 Before submitting or presenting the project:
 
