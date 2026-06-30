@@ -22,7 +22,8 @@ class WorkflowStepTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = done ? AppTheme.success : (active ? AppTheme.primary : AppTheme.muted);
+    final color =
+        done ? AppTheme.success : (active ? AppTheme.primary : AppTheme.muted);
 
     // عرض ثابت يمنع مشاكل unbounded width داخل horizontal scroll/Wrap.
     // وجود Spacer داخل Widget عرضه غير محدد كان ممكن يعمل RenderBox بلا حجم
@@ -32,9 +33,12 @@ class WorkflowStepTile extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: active ? color.withValues(alpha: 0.11) : AppTheme.elevated.withValues(alpha: 0.55),
+          color: active
+              ? color.withValues(alpha: 0.11)
+              : AppTheme.elevated.withValues(alpha: 0.55),
           borderRadius: BorderRadius.circular(22),
-          border: Border.all(color: color.withValues(alpha: active || done ? 0.42 : 0.18)),
+          border: Border.all(
+              color: color.withValues(alpha: active || done ? 0.42 : 0.18)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,7 +53,8 @@ class WorkflowStepTile extends StatelessWidget {
                     color: color.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(13),
                   ),
-                  child: Icon(done ? Icons.check_rounded : icon, color: color, size: 19),
+                  child: Icon(done ? Icons.check_rounded : icon,
+                      color: color, size: 19),
                 ),
                 const SizedBox(width: 8),
                 Expanded(
@@ -68,13 +73,20 @@ class WorkflowStepTile extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 12),
-            Text(title, maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w900)),
+            Text(title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontWeight: FontWeight.w900)),
             const SizedBox(height: 4),
             Text(
               subtitle,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(color: AppTheme.muted, fontSize: 12, height: 1.35, fontWeight: FontWeight.w700),
+              style: const TextStyle(
+                  color: AppTheme.muted,
+                  fontSize: 12,
+                  height: 1.35,
+                  fontWeight: FontWeight.w700),
             ),
           ],
         ),

@@ -58,7 +58,8 @@ class SectionCard extends StatelessWidget {
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w900),
+                        style: const TextStyle(
+                            fontSize: 17, fontWeight: FontWeight.w900),
                       ),
                       if (subtitleText != null) ...[
                         const SizedBox(height: 3),

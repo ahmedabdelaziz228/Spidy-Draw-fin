@@ -18,7 +18,9 @@ class UrlNormalizer {
       return value;
     }
 
-    return uri.replace(path: uri.path.replaceAll(RegExp(r'/+$'), '')).toString();
+    return uri
+        .replace(path: uri.path.replaceAll(RegExp(r'/+$'), ''))
+        .toString();
   }
 
   static bool isProbablyValid(String input) {

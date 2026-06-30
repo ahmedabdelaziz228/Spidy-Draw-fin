@@ -42,13 +42,19 @@ class InfoTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(label, style: const TextStyle(color: AppTheme.muted, fontSize: 12, fontWeight: FontWeight.w700)),
+                Text(label,
+                    style: const TextStyle(
+                        color: AppTheme.muted,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),
                 Text(
                   value,
-                  textDirection: _looksLtr(value) ? TextDirection.ltr : TextDirection.rtl,
+                  textDirection:
+                      _looksLtr(value) ? TextDirection.ltr : TextDirection.rtl,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w900),
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w900),
                 ),
               ],
             ),
@@ -58,5 +64,6 @@ class InfoTile extends StatelessWidget {
     );
   }
 
-  static bool _looksLtr(String text) => RegExp(r'^[0-9A-Za-z:/._\- ]+$').hasMatch(text);
+  static bool _looksLtr(String text) =>
+      RegExp(r'^[0-9A-Za-z:/._\- ]+$').hasMatch(text);
 }

@@ -56,7 +56,8 @@ class RobotStatus {
   }
 
   bool get isReady => state.toLowerCase() == 'ready';
-  bool get isBusy => state.toLowerCase() == 'executing' || state.toLowerCase() == 'moving';
+  bool get isBusy =>
+      state.toLowerCase() == 'executing' || state.toLowerCase() == 'moving';
   bool get isPenDown => pen.toLowerCase() == 'down';
 
   static double _toDouble(dynamic value) {

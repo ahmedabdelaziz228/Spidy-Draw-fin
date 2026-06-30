@@ -35,7 +35,8 @@ class PrimaryButton extends StatelessWidget {
               key: ValueKey('loader'),
               width: 18,
               height: 18,
-              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+              child: CircularProgressIndicator(
+                  strokeWidth: 2, color: Colors.white),
             )
           : Row(
               key: const ValueKey('label'),
@@ -68,7 +69,8 @@ class PrimaryButton extends StatelessWidget {
               foregroundColor: color,
               side: BorderSide(color: color.withValues(alpha: 0.62)),
               padding: padding,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18)),
               backgroundColor: color.withValues(alpha: 0.05),
               disabledForegroundColor: AppTheme.muted.withValues(alpha: 0.55),
             ),
@@ -76,7 +78,8 @@ class PrimaryButton extends StatelessWidget {
           )
         : DecoratedBox(
             decoration: BoxDecoration(
-              gradient: isDanger ? AppTheme.dangerGradient : AppTheme.primaryGradient,
+              gradient:
+                  isDanger ? AppTheme.dangerGradient : AppTheme.primaryGradient,
               borderRadius: BorderRadius.circular(18),
               boxShadow: effectiveOnPressed == null
                   ? const []
@@ -92,11 +95,13 @@ class PrimaryButton extends StatelessWidget {
               onPressed: effectiveOnPressed,
               style: FilledButton.styleFrom(
                 backgroundColor: Colors.transparent,
-                disabledBackgroundColor: AppTheme.elevated.withValues(alpha: 0.72),
+                disabledBackgroundColor:
+                    AppTheme.elevated.withValues(alpha: 0.72),
                 shadowColor: Colors.transparent,
                 foregroundColor: Colors.white,
                 padding: padding,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18)),
               ),
               child: child,
             ),

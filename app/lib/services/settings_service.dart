@@ -7,7 +7,8 @@ class SettingsService {
 
   Future<String> loadEspUrl() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(AppConstants.savedEspUrlKey) ?? AppConstants.defaultEspUrl;
+    return prefs.getString(AppConstants.savedEspUrlKey) ??
+        AppConstants.defaultEspUrl;
   }
 
   Future<void> saveEspUrl(String url) async {

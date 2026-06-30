@@ -100,7 +100,16 @@ class EspApiClient {
   }
 
   String _cleanGcode(String input) {
-    final allowedPrefixes = <String>{'G0', 'G00', 'G1', 'G01', 'G21', 'G90', 'M3', 'M5'};
+    final allowedPrefixes = <String>{
+      'G0',
+      'G00',
+      'G1',
+      'G01',
+      'G21',
+      'G90',
+      'M3',
+      'M5'
+    };
     final lines = input
         .replaceAll('\r\n', '\n')
         .replaceAll('\r', '\n')
@@ -108,7 +117,8 @@ class EspApiClient {
         .map((line) {
           final withoutComment = line.split(';').first.trim();
           if (withoutComment.isEmpty) return '';
-          final prefix = withoutComment.split(RegExp(r'\s+')).first.toUpperCase();
+          final prefix =
+              withoutComment.split(RegExp(r'\s+')).first.toUpperCase();
           if (!allowedPrefixes.contains(prefix)) return '';
           return withoutComment;
         })

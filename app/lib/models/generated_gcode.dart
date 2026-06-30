@@ -77,7 +77,8 @@ class GeneratedGcode {
       segments: rawSegments is List
           ? rawSegments
               .whereType<Map>()
-              .map((item) => GcodeSegment.fromJson(Map<String, dynamic>.from(item)))
+              .map((item) =>
+                  GcodeSegment.fromJson(Map<String, dynamic>.from(item)))
               .toList(growable: false)
           : const [],
       commandCount: _toInt(json['commandCount']),
@@ -92,7 +93,8 @@ class GeneratedGcode {
       safeHeightMm: _toDouble(json['safeHeightMm']),
       usedWidthMm: _toDouble(json['usedWidthMm']),
       usedHeightMm: _toDouble(json['usedHeightMm']),
-      truncated: json['truncated'] == true || json['truncated']?.toString().toLowerCase() == 'true',
+      truncated: json['truncated'] == true ||
+          json['truncated']?.toString().toLowerCase() == 'true',
     );
   }
 
@@ -165,7 +167,8 @@ class ImageGcodeSettings {
       rowStepPx: _toInt(json['rowStepPx'], fallback: 2),
       minRunPx: _toInt(json['minRunPx'], fallback: 2),
       maxCommands: _toInt(json['maxCommands'], fallback: 5500),
-      invert: json['invert'] == true || json['invert']?.toString().toLowerCase() == 'true',
+      invert: json['invert'] == true ||
+          json['invert']?.toString().toLowerCase() == 'true',
     );
   }
 

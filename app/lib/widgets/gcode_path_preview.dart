@@ -39,7 +39,8 @@ class GcodePathPreview extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           child: Stack(
             children: [
-              Positioned.fill(child: CustomPaint(painter: _PreviewBackgroundPainter())),
+              Positioned.fill(
+                  child: CustomPaint(painter: _PreviewBackgroundPainter())),
               Positioned.fill(
                 child: hasPreview
                     ? LayoutBuilder(
@@ -77,17 +78,24 @@ class GcodePathPreview extends StatelessWidget {
                                 width: 58,
                                 height: 58,
                                 decoration: BoxDecoration(
-                                  color: AppTheme.primary.withValues(alpha: 0.1),
+                                  color:
+                                      AppTheme.primary.withValues(alpha: 0.1),
                                   borderRadius: BorderRadius.circular(22),
-                                  border: Border.all(color: AppTheme.primary.withValues(alpha: 0.22)),
+                                  border: Border.all(
+                                      color: AppTheme.primary
+                                          .withValues(alpha: 0.22)),
                                 ),
-                                child: const Icon(Icons.polyline_rounded, color: AppTheme.primary, size: 30),
+                                child: const Icon(Icons.polyline_rounded,
+                                    color: AppTheme.primary, size: 30),
                               ),
                               const SizedBox(height: 12),
                               Text(
                                 emptyText,
                                 textAlign: TextAlign.center,
-                                style: const TextStyle(color: AppTheme.muted, fontWeight: FontWeight.w800, height: 1.45),
+                                style: const TextStyle(
+                                    color: AppTheme.muted,
+                                    fontWeight: FontWeight.w800,
+                                    height: 1.45),
                               ),
                             ],
                           ),
@@ -98,25 +106,32 @@ class GcodePathPreview extends StatelessWidget {
                 top: 12,
                 right: 12,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
                   decoration: BoxDecoration(
                     color: Colors.black.withValues(alpha: 0.52),
                     borderRadius: BorderRadius.circular(999),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                    border:
+                        Border.all(color: Colors.white.withValues(alpha: 0.12)),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
-                        hasPreview ? Icons.zoom_out_map_rounded : Icons.hourglass_empty_rounded,
+                        hasPreview
+                            ? Icons.zoom_out_map_rounded
+                            : Icons.hourglass_empty_rounded,
                         size: 15,
                         color: hasPreview ? AppTheme.success : AppTheme.muted,
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        hasPreview ? '${segments.length} segments • zoom' : 'Preview',
+                        hasPreview
+                            ? '${segments.length} segments • zoom'
+                            : 'Preview',
                         textDirection: TextDirection.ltr,
-                        style: const TextStyle(fontSize: 11.5, fontWeight: FontWeight.w900),
+                        style: const TextStyle(
+                            fontSize: 11.5, fontWeight: FontWeight.w900),
                       ),
                     ],
                   ),
@@ -180,7 +195,12 @@ class _GcodePathPainter extends CustomPainter {
     final sy = safeYmm;
     final sw = safeWidthMm;
     final sh = safeHeightMm;
-    final hasSafeArea = sx != null && sy != null && sw != null && sh != null && sw > 0 && sh > 0;
+    final hasSafeArea = sx != null &&
+        sy != null &&
+        sw != null &&
+        sh != null &&
+        sw > 0 &&
+        sh > 0;
 
     var minX = hasSafeArea ? sx : double.infinity;
     var minY = hasSafeArea ? sy : double.infinity;
@@ -234,16 +254,20 @@ class _GcodePathPainter extends CustomPainter {
       ..strokeWidth = 0.7;
 
     if (hasSafeArea) {
-      final safeRect = Rect.fromPoints(mapPoint(sx, sy), mapPoint(sx + sw, sy + sh));
-      final rrect = RRect.fromRectAndRadius(safeRect, const Radius.circular(12));
+      final safeRect =
+          Rect.fromPoints(mapPoint(sx, sy), mapPoint(sx + sw, sy + sh));
+      final rrect =
+          RRect.fromRectAndRadius(safeRect, const Radius.circular(12));
       canvas.drawRRect(rrect, safeFillPaint);
       canvas.drawRRect(rrect, safePaint);
 
       for (var i = 1; i < 4; i++) {
         final x = safeRect.left + (safeRect.width * i / 4);
-        canvas.drawLine(Offset(x, safeRect.top), Offset(x, safeRect.bottom), gridPaint);
+        canvas.drawLine(
+            Offset(x, safeRect.top), Offset(x, safeRect.bottom), gridPaint);
         final y = safeRect.top + (safeRect.height * i / 4);
-        canvas.drawLine(Offset(safeRect.left, y), Offset(safeRect.right, y), gridPaint);
+        canvas.drawLine(
+            Offset(safeRect.left, y), Offset(safeRect.right, y), gridPaint);
       }
     } else {
       final borderPaint = Paint()
@@ -252,7 +276,8 @@ class _GcodePathPainter extends CustomPainter {
         ..strokeWidth = 1;
 
       canvas.drawRRect(
-        RRect.fromRectAndRadius(Rect.fromLTWH(dx, dy, usedWidth, usedHeight), const Radius.circular(12)),
+        RRect.fromRectAndRadius(Rect.fromLTWH(dx, dy, usedWidth, usedHeight),
+            const Radius.circular(12)),
         borderPaint,
       );
     }
@@ -277,7 +302,8 @@ class _GcodePathPainter extends CustomPainter {
     if (hasSafeArea) {
       final labelPainter = TextPainter(
         text: TextSpan(
-          text: 'SAFE AREA  ${sw.toStringAsFixed(0)}×${sh.toStringAsFixed(0)} mm',
+          text:
+              'SAFE AREA  ${sw.toStringAsFixed(0)}×${sh.toStringAsFixed(0)} mm',
           style: TextStyle(
             color: AppTheme.secondary.withValues(alpha: 0.95),
             fontSize: 10,

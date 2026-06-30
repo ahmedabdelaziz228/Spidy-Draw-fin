@@ -43,13 +43,20 @@ class StatusPill extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(label, style: const TextStyle(color: AppTheme.muted, fontSize: 12, fontWeight: FontWeight.w700)),
+                Text(label,
+                    style: const TextStyle(
+                        color: AppTheme.muted,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700)),
                 const SizedBox(height: 4),
                 Text(
                   value,
                   overflow: TextOverflow.ellipsis,
-                  textDirection: RegExp(r'^[0-9.\-]+$').hasMatch(value) ? TextDirection.ltr : TextDirection.rtl,
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w900),
+                  textDirection: RegExp(r'^[0-9.\-]+$').hasMatch(value)
+                      ? TextDirection.ltr
+                      : TextDirection.rtl,
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.w900),
                 ),
               ],
             ),

@@ -131,7 +131,8 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: elevated.withValues(alpha: 0.74),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(18),
           borderSide: const BorderSide(color: softBorder),
@@ -166,7 +167,8 @@ class AppTheme {
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
           textStyle: const TextStyle(fontWeight: FontWeight.w900),
         ),
@@ -174,7 +176,8 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           side: const BorderSide(color: softBorder),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 15),
           textStyle: const TextStyle(fontWeight: FontWeight.w900),
         ),
@@ -183,7 +186,8 @@ class AppTheme {
         behavior: SnackBarBehavior.floating,
         elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-        contentTextStyle: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
+        contentTextStyle:
+            const TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
       ),
       textTheme: base.textTheme.apply(
         bodyColor: text,

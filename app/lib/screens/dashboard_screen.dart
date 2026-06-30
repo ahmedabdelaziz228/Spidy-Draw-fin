@@ -70,7 +70,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   bool _invertImage = true;
   bool _generatedFromImage = false;
 
-
   @override
   void initState() {
     super.initState();
@@ -135,7 +134,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           _startStatusPolling();
         }
         if (showErrors) {
-          _lastMessage = 'آخر تحديث: ${DateTime.now().toLocal().toString().substring(11, 19)}';
+          _lastMessage =
+              'آخر تحديث: ${DateTime.now().toLocal().toString().substring(11, 19)}';
         }
       });
     } on Object catch (e) {
@@ -190,7 +190,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       });
       _showSnack('تم اختيار الصورة. اضغط تحويل إلى G-code.', success: true);
     } on PlatformException catch (e) {
-      _showSnack('مشكلة صلاحيات أو كاميرا: ${e.message ?? e.code}', error: true);
+      _showSnack('مشكلة صلاحيات أو كاميرا: ${e.message ?? e.code}',
+          error: true);
     } on Object catch (e) {
       _showSnack('فشل اختيار الصورة: $e', error: true);
     }
@@ -244,11 +245,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           generated: generated,
           generatedFromImage: true,
         );
-        _lastMessage = generated.isEmpty ? 'الصورة لم تنتج خطوط رسم' : generated.summary;
+        _lastMessage =
+            generated.isEmpty ? 'الصورة لم تنتج خطوط رسم' : generated.summary;
       });
 
       if (generated.isEmpty) {
-        _showSnack('الصورة طلعت فاضية بعد التحويل. جرّب غيّر Threshold أو فعل Invert.', error: true);
+        _showSnack(
+            'الصورة طلعت فاضية بعد التحويل. جرّب غيّر Threshold أو فعل Invert.',
+            error: true);
       } else {
         _showSnack('تم توليد G-code من الصورة', success: true);
       }
@@ -277,7 +281,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final file = result.files.single;
     final bytes = file.bytes;
     if (bytes == null) {
-      _showSnack('مش قادر أقرأ الملف. جرّب افتحه كنص من زر المحرر.', error: true);
+      _showSnack('مش قادر أقرأ الملف. جرّب افتحه كنص من زر المحرر.',
+          error: true);
       return;
     }
 
@@ -297,7 +302,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     if (edited == null) return;
     setState(() {
-      _setGcodeState(edited, fileName: 'نص مكتوب يدويًا', generatedFromImage: false);
+      _setGcodeState(edited,
+          fileName: 'نص مكتوب يدويًا', generatedFromImage: false);
     });
     _showSnack('تم تحديث نص الـ G-code', success: true);
   }
@@ -314,7 +320,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
 
     final success = await _runAction(
-      loadingText: runAfterUpload ? 'جاري الرفع والتشغيل...' : 'جاري رفع G-code...',
+      loadingText:
+          runAfterUpload ? 'جاري الرفع والتشغيل...' : 'جاري رفع G-code...',
       action: () async {
         final uploadMsg = await _client.uploadGcodeText(_gcode);
         if (runAfterUpload) {
@@ -334,11 +341,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Future<void> _executeOnly() async {
     final ok = await _confirmRun();
     if (!ok) return;
-    await _runAction(loadingText: 'جاري تشغيل الرسم...', action: _client.execute);
+    await _runAction(
+        loadingText: 'جاري تشغيل الرسم...', action: _client.execute);
   }
 
   Future<void> _stop() async {
-    await _runAction(loadingText: 'جاري الإيقاف...', action: _client.stop, danger: true);
+    await _runAction(
+        loadingText: 'جاري الإيقاف...', action: _client.stop, danger: true);
   }
 
   Future<void> _clear() async {
@@ -349,7 +358,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       danger: true,
     );
     if (!ok) return;
-    await _runAction(loadingText: 'جاري المسح...', action: _client.clear, danger: true);
+    await _runAction(
+        loadingText: 'جاري المسح...', action: _client.clear, danger: true);
   }
 
   Future<void> _home() async {
@@ -465,7 +475,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Future<bool> _confirmRun() {
     return _confirm(
       title: 'تأكيد التشغيل',
-      message: 'تأكد أن الورقة ثابتة، القلم مرفوع في البداية، وأن Safe Area الحالية صحيحة: ${_safeAreaSummary()}.',
+      message:
+          'تأكد أن الورقة ثابتة، القلم مرفوع في البداية، وأن Safe Area الحالية صحيحة: ${_safeAreaSummary()}.',
       actionText: 'تشغيل',
     );
   }
@@ -482,7 +493,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         title: Text(title),
         content: Text(message),
         actions: [
-          TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('إلغاء')),
+          TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('إلغاء')),
           FilledButton(
             style: FilledButton.styleFrom(
               backgroundColor: danger ? AppTheme.danger : AppTheme.primary,
@@ -500,8 +513,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message, style: const TextStyle(fontWeight: FontWeight.w800)),
-        backgroundColor: error ? AppTheme.danger : (success ? AppTheme.success : AppTheme.primary),
+        content:
+            Text(message, style: const TextStyle(fontWeight: FontWeight.w800)),
+        backgroundColor: error
+            ? AppTheme.danger
+            : (success ? AppTheme.success : AppTheme.primary),
         behavior: SnackBarBehavior.floating,
       ),
     );
@@ -555,19 +571,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 gradient: AppTheme.primaryGradient,
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: const Icon(Icons.precision_manufacturing_rounded, size: 21, color: Colors.white),
+              child: const Icon(Icons.precision_manufacturing_rounded,
+                  size: 21, color: Colors.white),
             ),
             const SizedBox(width: 12),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Spidy Draw Control', style: TextStyle(fontWeight: FontWeight.w900)),
+                  const Text('Spidy Draw Control',
+                      style: TextStyle(fontWeight: FontWeight.w900)),
                   Text(
                     widget.espUrl,
                     textDirection: TextDirection.ltr,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(color: AppTheme.muted, fontSize: 12, fontWeight: FontWeight.w700),
+                    style: const TextStyle(
+                        color: AppTheme.muted,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700),
                   ),
                 ],
               ),
@@ -599,14 +620,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           // موجود بالفعل في الـ AppBar.
           child: LayoutBuilder(
             builder: (context, constraints) {
-              final maxWidth = constraints.maxWidth >= 1040 ? 1040.0 : double.infinity;
+              final maxWidth =
+                  constraints.maxWidth >= 1040 ? 1040.0 : double.infinity;
               return Align(
                 alignment: Alignment.topCenter,
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: maxWidth),
                   child: ListView(
                     physics: const ClampingScrollPhysics(),
-                    keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
                     padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
                     children: [
                       _buildGraduationHero(),
@@ -634,7 +657,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
-
 
   Widget _buildGraduationHero() {
     final readyToGenerate = _imageBytes != null;
@@ -665,21 +687,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.08),
                   borderRadius: BorderRadius.circular(22),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.14)),
+                  border:
+                      Border.all(color: Colors.white.withValues(alpha: 0.14)),
                 ),
-                child: const Icon(Icons.auto_awesome_rounded, color: AppTheme.primary, size: 30),
+                child: const Icon(Icons.auto_awesome_rounded,
+                    color: AppTheme.primary, size: 30),
               ),
               const SizedBox(width: 14),
               const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Graduation Project Mode', style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900)),
+                    Text('Graduation Project Mode',
+                        style: TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.w900)),
                     SizedBox(height: 4),
                     Text(
                       'Image → Safe Area → G-code → ESP32',
                       textDirection: TextDirection.ltr,
-                      style: TextStyle(color: AppTheme.muted, fontWeight: FontWeight.w800),
+                      style: TextStyle(
+                          color: AppTheme.muted, fontWeight: FontWeight.w800),
                     ),
                   ],
                 ),
@@ -699,18 +726,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
               InfoTile(
                 label: 'Image',
                 value: readyToGenerate ? 'SELECTED' : 'EMPTY',
-                icon: readyToGenerate ? Icons.image_rounded : Icons.add_photo_alternate_rounded,
+                icon: readyToGenerate
+                    ? Icons.image_rounded
+                    : Icons.add_photo_alternate_rounded,
                 color: readyToGenerate ? AppTheme.success : AppTheme.muted,
               ),
               InfoTile(
                 label: 'G-code',
                 value: readyToUpload ? '$totalLines lines' : 'NOT READY',
-                icon: readyToUpload ? Icons.code_rounded : Icons.pending_actions_rounded,
+                icon: readyToUpload
+                    ? Icons.code_rounded
+                    : Icons.pending_actions_rounded,
                 color: readyToUpload ? AppTheme.primary : AppTheme.muted,
               ),
               InfoTile(
                 label: 'Safe Area',
-                value: '${_safeWidthMm.toStringAsFixed(0)}×${_safeHeightMm.toStringAsFixed(0)} mm',
+                value:
+                    '${_safeWidthMm.toStringAsFixed(0)}×${_safeHeightMm.toStringAsFixed(0)} mm',
                 icon: Icons.crop_free_rounded,
                 color: AppTheme.secondary,
               ),
@@ -784,7 +816,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
         : _status.isReady
             ? AppTheme.success
             : AppTheme.secondary;
-    final progressText = _status.total <= 0 ? '0%' : '${(_status.progress * 100).toStringAsFixed(0)}%';
+    final progressText = _status.total <= 0
+        ? '0%'
+        : '${(_status.progress * 100).toStringAsFixed(0)}%';
 
     return SectionCard(
       title: _online ? 'Live Robot Status' : 'Robot Offline',
@@ -792,7 +826,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       icon: _online ? Icons.sensors_rounded : Icons.wifi_off_rounded,
       accent: stateColor,
       trailing: _isBusy
-          ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(strokeWidth: 2.4))
+          ? const SizedBox(
+              width: 22,
+              height: 22,
+              child: CircularProgressIndicator(strokeWidth: 2.4))
           : Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
               decoration: BoxDecoration(
@@ -803,12 +840,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(width: 8, height: 8, decoration: BoxDecoration(color: stateColor, shape: BoxShape.circle)),
+                  Container(
+                      width: 8,
+                      height: 8,
+                      decoration: BoxDecoration(
+                          color: stateColor, shape: BoxShape.circle)),
                   const SizedBox(width: 7),
                   Text(
                     _online ? _status.state.toUpperCase() : 'OFFLINE',
                     textDirection: TextDirection.ltr,
-                    style: TextStyle(color: stateColor, fontSize: 12, fontWeight: FontWeight.w900),
+                    style: TextStyle(
+                        color: stateColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w900),
                   ),
                 ],
               ),
@@ -825,9 +869,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
             children: [
               Row(
                 children: [
-                  const Text('Drawing Progress', style: TextStyle(color: AppTheme.muted, fontWeight: FontWeight.w800)),
+                  const Text('Drawing Progress',
+                      style: TextStyle(
+                          color: AppTheme.muted, fontWeight: FontWeight.w800)),
                   const Spacer(),
-                  Text(progressText, textDirection: TextDirection.ltr, style: const TextStyle(fontWeight: FontWeight.w900)),
+                  Text(progressText,
+                      textDirection: TextDirection.ltr,
+                      style: const TextStyle(fontWeight: FontWeight.w900)),
                 ],
               ),
               const SizedBox(height: 10),
@@ -847,7 +895,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     child: Text(
                       _lastMessage,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: AppTheme.muted, fontSize: 12, fontWeight: FontWeight.w700),
+                      style: const TextStyle(
+                          color: AppTheme.muted,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700),
                     ),
                   ),
                   Text(
@@ -864,10 +915,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
         _buildResponsiveTiles(
           minTileWidth: 155,
           children: [
-            StatusPill(label: 'الحالة', value: _status.state, icon: Icons.memory_rounded, color: stateColor),
-            StatusPill(label: 'القلم', value: _status.pen, icon: Icons.edit_rounded, color: _status.isPenDown ? AppTheme.secondary : AppTheme.primary),
-            StatusPill(label: 'X', value: _status.x.toStringAsFixed(1), icon: Icons.swap_horiz_rounded),
-            StatusPill(label: 'Y', value: _status.y.toStringAsFixed(1), icon: Icons.swap_vert_rounded),
+            StatusPill(
+                label: 'الحالة',
+                value: _status.state,
+                icon: Icons.memory_rounded,
+                color: stateColor),
+            StatusPill(
+                label: 'القلم',
+                value: _status.pen,
+                icon: Icons.edit_rounded,
+                color:
+                    _status.isPenDown ? AppTheme.secondary : AppTheme.primary),
+            StatusPill(
+                label: 'X',
+                value: _status.x.toStringAsFixed(1),
+                icon: Icons.swap_horiz_rounded),
+            StatusPill(
+                label: 'Y',
+                value: _status.y.toStringAsFixed(1),
+                icon: Icons.swap_vert_rounded),
           ],
         ),
       ],
@@ -880,7 +946,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     return SectionCard(
       title: 'Image to G-code Studio',
-      subtitle: 'اختار صورة، اضبط المنطقة الآمنة، وشوف المعاينة قبل تشغيل الجهاز',
+      subtitle:
+          'اختار صورة، اضبط المنطقة الآمنة، وشوف المعاينة قبل تشغيل الجهاز',
       icon: Icons.image_search_rounded,
       accent: AppTheme.primary,
       children: [
@@ -898,30 +965,35 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Positioned.fill(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(24),
-                        child: Image.memory(selectedImageBytes, fit: BoxFit.contain),
+                        child: Image.memory(selectedImageBytes,
+                            fit: BoxFit.contain),
                       ),
                     ),
                     Positioned(
                       top: 12,
                       left: 12,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 7),
                         decoration: BoxDecoration(
                           color: Colors.black.withValues(alpha: 0.55),
                           borderRadius: BorderRadius.circular(999),
-                          border: Border.all(color: Colors.white.withValues(alpha: 0.12)),
+                          border: Border.all(
+                              color: Colors.white.withValues(alpha: 0.12)),
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.check_circle_rounded, color: AppTheme.success, size: 16),
+                            const Icon(Icons.check_circle_rounded,
+                                color: AppTheme.success, size: 16),
                             const SizedBox(width: 6),
                             ConstrainedBox(
                               constraints: const BoxConstraints(maxWidth: 190),
                               child: Text(
                                 _imageName,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w900),
+                                style: const TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.w900),
                               ),
                             ),
                           ],
@@ -936,10 +1008,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
           spacing: 10,
           runSpacing: 10,
           children: [
-            PrimaryButton(label: 'اختيار صورة', icon: Icons.photo_library_rounded, outlined: true, onPressed: () => _pickImage(ImageSource.gallery)),
-            PrimaryButton(label: 'كاميرا', icon: Icons.photo_camera_rounded, outlined: true, onPressed: () => _pickImage(ImageSource.camera)),
-            PrimaryButton(label: 'تحويل فقط', icon: Icons.auto_fix_high_rounded, isBusy: _isBusy, onPressed: _generateGcodeFromImage),
-            PrimaryButton(label: 'تحويل + رفع + تشغيل', icon: Icons.rocket_launch_rounded, isBusy: _isBusy, onPressed: _generateUploadRun),
+            PrimaryButton(
+                label: 'اختيار صورة',
+                icon: Icons.photo_library_rounded,
+                outlined: true,
+                onPressed: () => _pickImage(ImageSource.gallery)),
+            PrimaryButton(
+                label: 'كاميرا',
+                icon: Icons.photo_camera_rounded,
+                outlined: true,
+                onPressed: () => _pickImage(ImageSource.camera)),
+            PrimaryButton(
+                label: 'تحويل فقط',
+                icon: Icons.auto_fix_high_rounded,
+                isBusy: _isBusy,
+                onPressed: _generateGcodeFromImage),
+            PrimaryButton(
+                label: 'تحويل + رفع + تشغيل',
+                icon: Icons.rocket_launch_rounded,
+                isBusy: _isBusy,
+                onPressed: _generateUploadRun),
           ],
         ),
         if (_isBusy && selectedImageBytes != null) ...[
@@ -962,14 +1050,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: generated.truncated ? AppTheme.secondary.withValues(alpha: 0.1) : AppTheme.success.withValues(alpha: 0.08),
+              color: generated.truncated
+                  ? AppTheme.secondary.withValues(alpha: 0.1)
+                  : AppTheme.success.withValues(alpha: 0.08),
               borderRadius: BorderRadius.circular(18),
-              border: Border.all(color: generated.truncated ? AppTheme.secondary.withValues(alpha: 0.3) : AppTheme.success.withValues(alpha: 0.22)),
+              border: Border.all(
+                  color: generated.truncated
+                      ? AppTheme.secondary.withValues(alpha: 0.3)
+                      : AppTheme.success.withValues(alpha: 0.22)),
             ),
             child: Text(
               generated.summary,
               style: TextStyle(
-                color: generated.truncated ? AppTheme.secondary : AppTheme.success,
+                color:
+                    generated.truncated ? AppTheme.secondary : AppTheme.success,
                 fontSize: 12,
                 height: 1.45,
                 fontWeight: FontWeight.w900,
@@ -980,7 +1074,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         const SizedBox(height: 10),
         const Text(
           'أفضل نتيجة: استخدم Logo أو Line art أبيض وأسود. لو التفاصيل كتير، قلل تفاصيل الصورة أو زوّد تبسيط المسار عشان عدد أوامر الـ ESP يقل.',
-          style: TextStyle(color: AppTheme.muted, fontSize: 12.5, height: 1.5, fontWeight: FontWeight.w700),
+          style: TextStyle(
+              color: AppTheme.muted,
+              fontSize: 12.5,
+              height: 1.5,
+              fontWeight: FontWeight.w700),
         ),
       ],
     );
@@ -1036,7 +1134,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     if (hadGeneratedGcode && !_shownGeneratedResetWarning) {
       _shownGeneratedResetWarning = true;
-      _showSnack('تم مسح الـ G-code القديم بعد تغيير الإعدادات. أعد التحويل قبل الرفع.');
+      _showSnack(
+          'تم مسح الـ G-code القديم بعد تغيير الإعدادات. أعد التحويل قبل الرفع.');
     }
   }
 
@@ -1116,12 +1215,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Row(
             children: [
               const Expanded(
-                child: Text('إعدادات التحويل', style: TextStyle(fontWeight: FontWeight.w900)),
+                child: Text('إعدادات التحويل',
+                    style: TextStyle(fontWeight: FontWeight.w900)),
               ),
               FilterChip(
                 label: const Text('Black strokes'),
                 selected: _invertImage,
-                onSelected: _isBusy ? null : (value) => _updateConversionSetting(() => _invertImage = value),
+                onSelected: _isBusy
+                    ? null
+                    : (value) =>
+                        _updateConversionSetting(() => _invertImage = value),
               ),
             ],
           ),
@@ -1144,7 +1247,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
             max: 320,
             divisions: 24,
             display: '${_rasterWidthPx.round()} px',
-            onChanged: (v) => _updateConversionSetting(() => _rasterWidthPx = v),
+            onChanged: (v) =>
+                _updateConversionSetting(() => _rasterWidthPx = v),
           ),
           _sliderTile(
             label: 'تبسيط المسار',
@@ -1168,29 +1272,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
       decoration: BoxDecoration(
         color: Colors.black.withValues(alpha: 0.18),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: validation == null ? AppTheme.border : AppTheme.danger),
+        border: Border.all(
+            color: validation == null ? AppTheme.border : AppTheme.danger),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
             children: [
-              const Icon(Icons.crop_free_rounded, color: AppTheme.secondary, size: 20),
+              const Icon(Icons.crop_free_rounded,
+                  color: AppTheme.secondary, size: 20),
               const SizedBox(width: 8),
               const Expanded(
-                child: Text('Safe Drawing Area', style: TextStyle(fontWeight: FontWeight.w900)),
+                child: Text('Safe Drawing Area',
+                    style: TextStyle(fontWeight: FontWeight.w900)),
               ),
               Text(
                 'mm',
                 textDirection: TextDirection.ltr,
-                style: TextStyle(color: validation == null ? AppTheme.muted : AppTheme.danger, fontWeight: FontWeight.w900),
+                style: TextStyle(
+                    color:
+                        validation == null ? AppTheme.muted : AppTheme.danger,
+                    fontWeight: FontWeight.w900),
               ),
             ],
           ),
           const SizedBox(height: 6),
           Text(
             'دي حدود المنطقة اللي الرسم مسموح يدخلها. التطبيق هيكبر/يصغر الصورة ويحطها في النص جوه الحدود دي فقط.',
-            style: TextStyle(color: validation == null ? AppTheme.muted : AppTheme.danger, fontSize: 12, height: 1.45),
+            style: TextStyle(
+                color: validation == null ? AppTheme.muted : AppTheme.danger,
+                fontSize: 12,
+                height: 1.45),
           ),
           const SizedBox(height: 12),
           LayoutBuilder(
@@ -1205,7 +1318,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           controller: _safeXController,
                           minValue: 0,
                           maxValue: 210,
-                          onChanged: (v) => _updateConversionSetting(() => _safeXmm = v),
+                          onChanged: (v) =>
+                              _updateConversionSetting(() => _safeXmm = v),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -1215,7 +1329,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           controller: _safeYController,
                           minValue: 0,
                           maxValue: 297,
-                          onChanged: (v) => _updateConversionSetting(() => _safeYmm = v),
+                          onChanged: (v) =>
+                              _updateConversionSetting(() => _safeYmm = v),
                         ),
                       ),
                     ],
@@ -1229,7 +1344,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           controller: _safeWidthController,
                           minValue: 10,
                           maxValue: 210,
-                          onChanged: (v) => _updateConversionSetting(() => _safeWidthMm = v),
+                          onChanged: (v) =>
+                              _updateConversionSetting(() => _safeWidthMm = v),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -1239,7 +1355,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           controller: _safeHeightController,
                           minValue: 10,
                           maxValue: 297,
-                          onChanged: (v) => _updateConversionSetting(() => _safeHeightMm = v),
+                          onChanged: (v) =>
+                              _updateConversionSetting(() => _safeHeightMm = v),
                         ),
                       ),
                     ],
@@ -1287,12 +1404,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 onPressed: _isBusy ? null : _applyDefaultSafeArea,
               ),
               ActionChip(
-                avatar: const Icon(Icons.stay_current_portrait_rounded, size: 18),
+                avatar:
+                    const Icon(Icons.stay_current_portrait_rounded, size: 18),
                 label: const Text('A4 Portrait'),
                 onPressed: _isBusy ? null : _applyA4PortraitSafeArea,
               ),
               ActionChip(
-                avatar: const Icon(Icons.stay_current_landscape_rounded, size: 18),
+                avatar:
+                    const Icon(Icons.stay_current_landscape_rounded, size: 18),
                 label: const Text('Wide Area'),
                 onPressed: _isBusy ? null : _applyA4LandscapeSafeArea,
               ),
@@ -1327,8 +1446,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       children: [
         Row(
           children: [
-            Expanded(child: Text(label, style: const TextStyle(color: AppTheme.muted, fontSize: 12))),
-            Text(display, textDirection: TextDirection.ltr, style: const TextStyle(fontWeight: FontWeight.w900)),
+            Expanded(
+                child: Text(label,
+                    style:
+                        const TextStyle(color: AppTheme.muted, fontSize: 12))),
+            Text(display,
+                textDirection: TextDirection.ltr,
+                style: const TextStyle(fontWeight: FontWeight.w900)),
           ],
         ),
         Slider(
@@ -1364,7 +1488,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
         if (parsed == null) return;
         final clamped = parsed.clamp(minValue, maxValue).toDouble();
         if (clamped != parsed) {
-          final newText = clamped.toStringAsFixed(clamped.truncateToDouble() == clamped ? 0 : 1);
+          final newText = clamped
+              .toStringAsFixed(clamped.truncateToDouble() == clamped ? 0 : 1);
           controller.value = TextEditingValue(
             text: newText,
             selection: TextSelection.collapsed(offset: newText.length),
@@ -1379,7 +1504,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final lines = _gcodeLines.length;
     return SectionCard(
       title: 'G-code Source',
-      subtitle: 'Generated أو ملف جاهز أو نص يدوي — كله بيتنضف قبل الرفع للـ ESP',
+      subtitle:
+          'Generated أو ملف جاهز أو نص يدوي — كله بيتنضف قبل الرفع للـ ESP',
       icon: Icons.file_upload_rounded,
       accent: AppTheme.success,
       children: [
@@ -1399,16 +1525,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   color: AppTheme.success.withValues(alpha: 0.13),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Icon(Icons.description_rounded, color: AppTheme.success),
+                child: const Icon(Icons.description_rounded,
+                    color: AppTheme.success),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(_fileName, overflow: TextOverflow.ellipsis, style: const TextStyle(fontWeight: FontWeight.w900)),
+                    Text(_fileName,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontWeight: FontWeight.w900)),
                     const SizedBox(height: 4),
-                    Text('$lines سطر جاهز للرفع', style: const TextStyle(color: AppTheme.muted, fontSize: 12, fontWeight: FontWeight.w700)),
+                    Text('$lines سطر جاهز للرفع',
+                        style: const TextStyle(
+                            color: AppTheme.muted,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700)),
                   ],
                 ),
               ),
@@ -1416,33 +1549,50 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
                     decoration: BoxDecoration(
-                      color: lines > 0 ? AppTheme.success.withValues(alpha: 0.1) : AppTheme.elevated,
+                      color: lines > 0
+                          ? AppTheme.success.withValues(alpha: 0.1)
+                          : AppTheme.elevated,
                       borderRadius: BorderRadius.circular(999),
-                      border: Border.all(color: lines > 0 ? AppTheme.success.withValues(alpha: 0.25) : AppTheme.softBorder),
+                      border: Border.all(
+                          color: lines > 0
+                              ? AppTheme.success.withValues(alpha: 0.25)
+                              : AppTheme.softBorder),
                     ),
                     child: Text(
                       lines > 0 ? 'READY' : 'EMPTY',
                       textDirection: TextDirection.ltr,
-                      style: TextStyle(color: lines > 0 ? AppTheme.success : AppTheme.muted, fontSize: 11, fontWeight: FontWeight.w900),
+                      style: TextStyle(
+                          color: lines > 0 ? AppTheme.success : AppTheme.muted,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w900),
                     ),
                   ),
                   if (_isUploaded) ...[
                     const SizedBox(height: 7),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 7),
                       decoration: BoxDecoration(
                         color: AppTheme.success.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(999),
-                        border: Border.all(color: AppTheme.success.withValues(alpha: 0.25)),
+                        border: Border.all(
+                            color: AppTheme.success.withValues(alpha: 0.25)),
                       ),
                       child: const Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.cloud_done_rounded, size: 14, color: AppTheme.success),
+                          Icon(Icons.cloud_done_rounded,
+                              size: 14, color: AppTheme.success),
                           SizedBox(width: 5),
-                          Text('UPLOADED', textDirection: TextDirection.ltr, style: TextStyle(color: AppTheme.success, fontSize: 10.5, fontWeight: FontWeight.w900)),
+                          Text('UPLOADED',
+                              textDirection: TextDirection.ltr,
+                              style: TextStyle(
+                                  color: AppTheme.success,
+                                  fontSize: 10.5,
+                                  fontWeight: FontWeight.w900)),
                         ],
                       ),
                     ),
@@ -1457,10 +1607,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
           spacing: 10,
           runSpacing: 10,
           children: [
-            PrimaryButton(label: 'اختيار ملف', icon: Icons.folder_open_rounded, outlined: true, onPressed: _pickGcodeFile),
-            PrimaryButton(label: 'كتابة / تعديل', icon: Icons.edit_note_rounded, outlined: true, onPressed: _openEditor),
-            PrimaryButton(label: 'رفع فقط', icon: Icons.cloud_upload_rounded, isBusy: _isBusy, onPressed: () => _upload(runAfterUpload: false)),
-            PrimaryButton(label: 'رفع وتشغيل', icon: Icons.play_arrow_rounded, isBusy: _isBusy, onPressed: () => _upload(runAfterUpload: true)),
+            PrimaryButton(
+                label: 'اختيار ملف',
+                icon: Icons.folder_open_rounded,
+                outlined: true,
+                onPressed: _pickGcodeFile),
+            PrimaryButton(
+                label: 'كتابة / تعديل',
+                icon: Icons.edit_note_rounded,
+                outlined: true,
+                onPressed: _openEditor),
+            PrimaryButton(
+                label: 'رفع فقط',
+                icon: Icons.cloud_upload_rounded,
+                isBusy: _isBusy,
+                onPressed: () => _upload(runAfterUpload: false)),
+            PrimaryButton(
+                label: 'رفع وتشغيل',
+                icon: Icons.play_arrow_rounded,
+                isBusy: _isBusy,
+                onPressed: () => _upload(runAfterUpload: true)),
           ],
         ),
       ],
@@ -1478,10 +1644,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
           spacing: 10,
           runSpacing: 10,
           children: [
-            PrimaryButton(label: 'تشغيل الموجود', icon: Icons.play_arrow_rounded, isBusy: _isBusy, onPressed: _executeOnly),
-            PrimaryButton(label: 'إيقاف فوري', icon: Icons.stop_rounded, isDanger: true, isBusy: _isBusy, onPressed: _stop),
-            PrimaryButton(label: 'مسح Queue', icon: Icons.delete_sweep_rounded, isDanger: true, outlined: true, isBusy: _isBusy, onPressed: _clear),
-            PrimaryButton(label: 'تصفير الموضع', icon: Icons.home_rounded, outlined: true, isBusy: _isBusy, onPressed: _home),
+            PrimaryButton(
+                label: 'تشغيل الموجود',
+                icon: Icons.play_arrow_rounded,
+                isBusy: _isBusy,
+                onPressed: _executeOnly),
+            PrimaryButton(
+                label: 'إيقاف فوري',
+                icon: Icons.stop_rounded,
+                isDanger: true,
+                isBusy: _isBusy,
+                onPressed: _stop),
+            PrimaryButton(
+                label: 'مسح Queue',
+                icon: Icons.delete_sweep_rounded,
+                isDanger: true,
+                outlined: true,
+                isBusy: _isBusy,
+                onPressed: _clear),
+            PrimaryButton(
+                label: 'تصفير الموضع',
+                icon: Icons.home_rounded,
+                outlined: true,
+                isBusy: _isBusy,
+                onPressed: _home),
           ],
         ),
         const SizedBox(height: 12),
@@ -1490,17 +1676,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
           decoration: BoxDecoration(
             color: AppTheme.secondary.withValues(alpha: 0.08),
             borderRadius: BorderRadius.circular(18),
-            border: Border.all(color: AppTheme.secondary.withValues(alpha: 0.22)),
+            border:
+                Border.all(color: AppTheme.secondary.withValues(alpha: 0.22)),
           ),
           child: const Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(Icons.warning_amber_rounded, color: AppTheme.secondary, size: 20),
+              Icon(Icons.warning_amber_rounded,
+                  color: AppTheme.secondary, size: 20),
               SizedBox(width: 10),
               Expanded(
                 child: Text(
                   'قبل التشغيل: ثبت الورقة، ارفع القلم، واتأكد إن Safe Area مطابقة للمساحة الحقيقية على الجهاز.',
-                  style: TextStyle(color: AppTheme.muted, fontSize: 12.5, height: 1.45, fontWeight: FontWeight.w700),
+                  style: TextStyle(
+                      color: AppTheme.muted,
+                      fontSize: 12.5,
+                      height: 1.45,
+                      fontWeight: FontWeight.w700),
                 ),
               ),
             ],
@@ -1513,15 +1705,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget _buildManualCard() {
     return SectionCard(
       title: 'Manual Calibration Pad',
-      subtitle: 'اضغط ضغطة واحدة للحركة خطوة، أو اضغط مطولًا لحركة مستمرة بسلاسة',
+      subtitle:
+          'اضغط ضغطة واحدة للحركة خطوة، أو اضغط مطولًا لحركة مستمرة بسلاسة',
       icon: Icons.gamepad_rounded,
       accent: AppTheme.primary,
       children: [
         Row(
           children: [
-            Expanded(child: PrimaryButton(label: 'القلم فوق', icon: Icons.keyboard_arrow_up_rounded, outlined: true, onPressed: () => _pen(false))),
+            Expanded(
+                child: PrimaryButton(
+                    label: 'القلم فوق',
+                    icon: Icons.keyboard_arrow_up_rounded,
+                    outlined: true,
+                    onPressed: () => _pen(false))),
             const SizedBox(width: 10),
-            Expanded(child: PrimaryButton(label: 'القلم تحت', icon: Icons.keyboard_arrow_down_rounded, outlined: true, onPressed: () => _pen(true))),
+            Expanded(
+                child: PrimaryButton(
+                    label: 'القلم تحت',
+                    icon: Icons.keyboard_arrow_down_rounded,
+                    outlined: true,
+                    onPressed: () => _pen(true))),
           ],
         ),
         const SizedBox(height: 16),
@@ -1536,25 +1739,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             child: Column(
               children: [
-                _movePadButton(icon: Icons.keyboard_arrow_up_rounded, label: 'Y+', moveAngle: 90),
+                _movePadButton(
+                    icon: Icons.keyboard_arrow_up_rounded,
+                    label: 'Y+',
+                    moveAngle: 90),
                 const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _movePadButton(icon: Icons.keyboard_arrow_right_rounded, label: 'X-', moveAngle: 180),
+                    _movePadButton(
+                        icon: Icons.keyboard_arrow_right_rounded,
+                        label: 'X-',
+                        moveAngle: 180),
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        _roundMoveButton(icon: Icons.my_location_rounded, onPressed: _home, color: AppTheme.secondary),
+                        _roundMoveButton(
+                            icon: Icons.my_location_rounded,
+                            onPressed: _home,
+                            color: AppTheme.secondary),
                         const SizedBox(height: 5),
-                        const Text('HOME', textDirection: TextDirection.ltr, style: TextStyle(color: AppTheme.secondary, fontSize: 9, fontWeight: FontWeight.w900)),
+                        const Text('HOME',
+                            textDirection: TextDirection.ltr,
+                            style: TextStyle(
+                                color: AppTheme.secondary,
+                                fontSize: 9,
+                                fontWeight: FontWeight.w900)),
                       ],
                     ),
-                    _movePadButton(icon: Icons.keyboard_arrow_left_rounded, label: 'X+', moveAngle: 0),
+                    _movePadButton(
+                        icon: Icons.keyboard_arrow_left_rounded,
+                        label: 'X+',
+                        moveAngle: 0),
                   ],
                 ),
                 const SizedBox(height: 10),
-                _movePadButton(icon: Icons.keyboard_arrow_down_rounded, label: 'Y-', moveAngle: 270),
+                _movePadButton(
+                    icon: Icons.keyboard_arrow_down_rounded,
+                    label: 'Y-',
+                    moveAngle: 270),
               ],
             ),
           ),
@@ -1562,7 +1785,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
         const SizedBox(height: 12),
         const Text(
           'اضغط مطولًا للحركة المستمرة. الليبل X+/Y+ يوضح اتجاه الحركة حسب firmware الحالي.',
-          style: TextStyle(color: AppTheme.muted, fontSize: 12, height: 1.5, fontWeight: FontWeight.w700),
+          style: TextStyle(
+              color: AppTheme.muted,
+              fontSize: 12,
+              height: 1.5,
+              fontWeight: FontWeight.w700),
         ),
       ],
     );
@@ -1581,7 +1808,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
         Text(
           label,
           textDirection: TextDirection.ltr,
-          style: const TextStyle(color: AppTheme.primary, fontSize: 10, fontWeight: FontWeight.w900),
+          style: const TextStyle(
+              color: AppTheme.primary,
+              fontSize: 10,
+              fontWeight: FontWeight.w900),
         ),
       ],
     );
@@ -1612,9 +1842,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       height: 58,
       child: GestureDetector(
         onTap: triggerTap,
-        onLongPressStart: moveAngle == null || disabled ? null : (_) => _startHoldingMove(moveAngle!),
-        onLongPressEnd: moveAngle == null || disabled ? null : (_) => _stopHoldingMove(),
-        onLongPressCancel: moveAngle == null || disabled ? null : _stopHoldingMove,
+        onLongPressStart: moveAngle == null || disabled
+            ? null
+            : (_) => _startHoldingMove(moveAngle!),
+        onLongPressEnd:
+            moveAngle == null || disabled ? null : (_) => _stopHoldingMove(),
+        onLongPressCancel:
+            moveAngle == null || disabled ? null : _stopHoldingMove,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 120),
           curve: Curves.easeOut,
@@ -1638,7 +1872,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-
   Widget _buildResponsiveTiles({
     required List<Widget> children,
     double minTileWidth = 160,
@@ -1655,8 +1888,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ? constraints.maxWidth
             : MediaQuery.sizeOf(context).width;
         final safeWidth = maxWidth <= 0 ? minTileWidth : maxWidth;
-        final columnCount = (safeWidth / minTileWidth).floor().clamp(1, children.length);
-        final tileWidth = (safeWidth - (spacing * (columnCount - 1))) / columnCount;
+        final columnCount =
+            (safeWidth / minTileWidth).floor().clamp(1, children.length);
+        final tileWidth =
+            (safeWidth - (spacing * (columnCount - 1))) / columnCount;
 
         return Wrap(
           spacing: spacing,
@@ -1675,7 +1910,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildPreviewCard() {
     final totalLines = _gcodeLines.length;
-    final previewLines = _gcodeLines.take(AppConstants.maxPreviewLines).join('\n');
+    final previewLines =
+        _gcodeLines.take(AppConstants.maxPreviewLines).join('\n');
     return SectionCard(
       title: 'G-code Console Preview',
       subtitle: 'معاينة أول أوامر قبل الرفع — مفيدة في العرض والتصحيح',
@@ -1684,7 +1920,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       trailing: Text(
         '$totalLines lines',
         textDirection: TextDirection.ltr,
-        style: const TextStyle(color: AppTheme.muted, fontWeight: FontWeight.w900),
+        style:
+            const TextStyle(color: AppTheme.muted, fontWeight: FontWeight.w900),
       ),
       children: [
         Container(
@@ -1718,13 +1955,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
           const SizedBox(height: 8),
           Text(
             'المعاينة بتعرض أول ${AppConstants.maxPreviewLines} سطر فقط من أصل $totalLines.',
-            style: const TextStyle(color: AppTheme.muted, fontSize: 12, fontWeight: FontWeight.w700),
+            style: const TextStyle(
+                color: AppTheme.muted,
+                fontSize: 12,
+                fontWeight: FontWeight.w700),
           ),
         ],
       ],
     );
   }
-
 }
 
 class _A4SafeAreaMiniPreview extends StatelessWidget {
@@ -1773,7 +2012,8 @@ class _A4SafeAreaMiniPreview extends StatelessWidget {
           Text(
             valid ? 'A4 Safe' : 'Out of A4',
             textDirection: TextDirection.ltr,
-            style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.w900),
+            style: TextStyle(
+                color: color, fontSize: 10, fontWeight: FontWeight.w900),
           ),
         ],
       ),
@@ -1816,8 +2056,10 @@ class _A4SafeAreaPainter extends CustomPainter {
     final w = h * paperAspect;
     final left = (size.width - w) / 2;
     final paper = Rect.fromLTWH(left, 0, w, h);
-    canvas.drawRRect(RRect.fromRectAndRadius(paper, const Radius.circular(4)), paperPaint);
-    canvas.drawRRect(RRect.fromRectAndRadius(paper, const Radius.circular(4)), paperBorder);
+    canvas.drawRRect(
+        RRect.fromRectAndRadius(paper, const Radius.circular(4)), paperPaint);
+    canvas.drawRRect(
+        RRect.fromRectAndRadius(paper, const Radius.circular(4)), paperBorder);
 
     final safe = Rect.fromLTWH(
       paper.left + (safeX / 210.0) * paper.width,
@@ -1854,17 +2096,23 @@ class _EmptyImageStage extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppTheme.primary.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(26),
-              border: Border.all(color: AppTheme.primary.withValues(alpha: 0.28)),
+              border:
+                  Border.all(color: AppTheme.primary.withValues(alpha: 0.28)),
             ),
-            child: const Icon(Icons.add_photo_alternate_rounded, color: AppTheme.primary, size: 36),
+            child: const Icon(Icons.add_photo_alternate_rounded,
+                color: AppTheme.primary, size: 36),
           ),
           const SizedBox(height: 14),
-          const Text('اختار صورة أو صوّر بالكاميرا', style: TextStyle(fontWeight: FontWeight.w900)),
+          const Text('اختار صورة أو صوّر بالكاميرا',
+              style: TextStyle(fontWeight: FontWeight.w900)),
           const SizedBox(height: 6),
           const Text(
             'بعدها التطبيق هيحول الصورة إلى G-code محليًا',
             textAlign: TextAlign.center,
-            style: TextStyle(color: AppTheme.muted, fontSize: 12.5, fontWeight: FontWeight.w700),
+            style: TextStyle(
+                color: AppTheme.muted,
+                fontSize: 12.5,
+                fontWeight: FontWeight.w700),
           ),
         ],
       ),

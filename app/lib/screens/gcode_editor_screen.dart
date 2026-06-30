@@ -80,7 +80,8 @@ class _GcodeEditorScreenState extends State<GcodeEditorScreen> {
                   child: PrimaryButton(
                     label: 'حفظ النص',
                     icon: Icons.save_rounded,
-                    onPressed: () => Navigator.of(context).pop(_controller.text),
+                    onPressed: () =>
+                        Navigator.of(context).pop(_controller.text),
                   ),
                 ),
               ],

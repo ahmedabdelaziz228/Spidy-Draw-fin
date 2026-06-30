@@ -56,7 +56,9 @@ class _VectorPath {
     for (var i = 1; i < points.length; i++) {
       total += points[i - 1].distanceTo(points[i]);
     }
-    if (closed && points.length > 2 && points.last.distanceTo(points.first) > 1e-6) {
+    if (closed &&
+        points.length > 2 &&
+        points.last.distanceTo(points.first) > 1e-6) {
       total += points.last.distanceTo(points.first);
     }
     lengthMm = total;
@@ -64,7 +66,8 @@ class _VectorPath {
 }
 
 class _FitTransform {
-  const _FitTransform({required this.scale, required this.offsetX, required this.offsetY});
+  const _FitTransform(
+      {required this.scale, required this.offsetX, required this.offsetY});
 
   final double scale;
   final double offsetX;
@@ -105,14 +108,16 @@ Map<String, dynamic> _convertImageToGcodeTask(Map<String, dynamic> args) {
   );
 
   if (settings.safeWidthMm < 10 || settings.safeHeightMm < 10) {
-    throw const ImageToGcodeException('Safe Area صغيرة جدًا. خلي العرض والارتفاع أكبر من 10 mm.');
+    throw const ImageToGcodeException(
+        'Safe Area صغيرة جدًا. خلي العرض والارتفاع أكبر من 10 mm.');
   }
   if (settings.safeXmm < 0 || settings.safeYmm < 0) {
     throw const ImageToGcodeException('بداية Safe Area لازم تكون صفر أو أكبر.');
   }
   if (settings.safeXmm + settings.safeWidthMm > _workspaceWidthMm + 0.001 ||
       settings.safeYmm + settings.safeHeightMm > _workspaceHeightMm + 0.001) {
-    throw const ImageToGcodeException('Safe Area خارج مساحة A4: الحد الأقصى X=210mm و Y=297mm.');
+    throw const ImageToGcodeException(
+        'Safe Area خارج مساحة A4: الحد الأقصى X=210mm و Y=297mm.');
   }
 
   final decoded = img.decodeImage(bytes);
@@ -161,12 +166,14 @@ Map<String, dynamic> _convertImageToGcodeTask(Map<String, dynamic> args) {
   );
 
   if (paths.isEmpty) {
-    throw const ImageToGcodeException('الصورة لم تنتج Contours. جرّب Threshold أو غيّر Black strokes/White strokes أو استخدم صورة أوضح.');
+    throw const ImageToGcodeException(
+        'الصورة لم تنتج Contours. جرّب Threshold أو غيّر Black strokes/White strokes أو استخدم صورة أوضح.');
   }
 
   final fit = _fitToSafeArea(paths, settings);
   paths = _transformPathsToSafeArea(paths, settings, fit);
-  paths = _optimizePaths(paths, startPoint: _Point(settings.safeXmm, settings.safeYmm));
+  paths = _optimizePaths(paths,
+      startPoint: _Point(settings.safeXmm, settings.safeYmm));
 
   final generated = _generateGcode(paths, settings);
 
@@ -194,7 +201,8 @@ List<Uint8List> _thresholdImage(
   required int threshold,
   required bool blackStrokes,
 }) {
-  final rows = List<Uint8List>.generate(image.height, (_) => Uint8List(image.width));
+  final rows =
+      List<Uint8List>.generate(image.height, (_) => Uint8List(image.width));
 
   for (var y = 0; y < image.height; y++) {
     final row = rows[y];
@@ -299,7 +307,8 @@ List<_VectorPath> _extractContourPaths(
       if (orderedBoundary.length < 2) continue;
 
       var points = orderedBoundary
-          .map((code) => _pixelToWorkspacePoint(code, width, height, workspaceWidthMm, workspaceHeightMm))
+          .map((code) => _pixelToWorkspacePoint(
+              code, width, height, workspaceWidthMm, workspaceHeightMm))
           .toList(growable: false);
 
       points = _removeRedundantPoints(points, minDistance: _minPointDistanceMm);
@@ -362,7 +371,8 @@ List<int> _collectComponent(
   return component;
 }
 
-Set<int> _componentBoundary(List<int> component, List<Uint8List> binary, int width, int height) {
+Set<int> _componentBoundary(
+    List<int> component, List<Uint8List> binary, int width, int height) {
   final boundary = <int>{};
 
   for (final code in component) {
@@ -380,7 +390,11 @@ Set<int> _componentBoundary(List<int> component, List<Uint8List> binary, int wid
     for (final dir in dirs4) {
       final nx = x + dir[0];
       final ny = y + dir[1];
-      if (nx < 0 || nx >= width || ny < 0 || ny >= height || binary[ny][nx] == 0) {
+      if (nx < 0 ||
+          nx >= width ||
+          ny < 0 ||
+          ny >= height ||
+          binary[ny][nx] == 0) {
         isBoundary = true;
         break;
       }
@@ -443,12 +457,14 @@ List<int> _traceBoundary(Set<int> boundary, int width, int height) {
 
     if (current == start &&
         contour.length > 2 &&
-        ((backtrackX == startBacktrackX && backtrackY == startBacktrackY) || contour.length > boundary.length)) {
+        ((backtrackX == startBacktrackX && backtrackY == startBacktrackY) ||
+            contour.length > boundary.length)) {
       break;
     }
   }
 
-  if (contour.length < math.min(12, boundary.length) || contour.length < boundary.length * 0.20) {
+  if (contour.length < math.min(12, boundary.length) ||
+      contour.length < boundary.length * 0.20) {
     return _greedyBoundaryOrder(boundary, width);
   }
 
@@ -512,7 +528,8 @@ _Point _pixelToWorkspacePoint(
 
 int _encode(int x, int y, int width) => (y * width) + x;
 
-List<_Point> _removeRedundantPoints(List<_Point> points, {required double minDistance}) {
+List<_Point> _removeRedundantPoints(List<_Point> points,
+    {required double minDistance}) {
   if (points.isEmpty) return const [];
   final output = <_Point>[points.first];
   for (final point in points.skip(1)) {
@@ -621,10 +638,12 @@ double _pointLineDistance(_Point point, _Point start, _Point end) {
   final y2 = end.y;
   final denom = math.sqrt(math.pow(y2 - y1, 2) + math.pow(x2 - x1, 2));
   if (denom == 0) return point.distanceTo(start);
-  return ((y2 - y1) * px - (x2 - x1) * py + (x2 * y1) - (y2 * x1)).abs() / denom;
+  return ((y2 - y1) * px - (x2 - x1) * py + (x2 * y1) - (y2 * x1)).abs() /
+      denom;
 }
 
-_FitTransform _fitToSafeArea(List<_VectorPath> paths, ImageGcodeSettings settings) {
+_FitTransform _fitToSafeArea(
+    List<_VectorPath> paths, ImageGcodeSettings settings) {
   final xs = <double>[];
   final ys = <double>[];
   for (final path in paths) {
@@ -647,9 +666,14 @@ _FitTransform _fitToSafeArea(List<_VectorPath> paths, ImageGcodeSettings setting
 
   // Same as Python _fit_transform, but instead of safe_margin it uses the
   // exact rectangle entered by the user.
-  final safeScale = math.min(settings.safeWidthMm / drawW, settings.safeHeightMm / drawH);
-  final offsetX = settings.safeXmm + ((settings.safeWidthMm - (drawW * safeScale)) / 2.0) - (minX * safeScale);
-  final offsetY = settings.safeYmm + ((settings.safeHeightMm - (drawH * safeScale)) / 2.0) - (minY * safeScale);
+  final safeScale =
+      math.min(settings.safeWidthMm / drawW, settings.safeHeightMm / drawH);
+  final offsetX = settings.safeXmm +
+      ((settings.safeWidthMm - (drawW * safeScale)) / 2.0) -
+      (minX * safeScale);
+  final offsetY = settings.safeYmm +
+      ((settings.safeHeightMm - (drawH * safeScale)) / 2.0) -
+      (minY * safeScale);
 
   return _FitTransform(scale: safeScale, offsetX: offsetX, offsetY: offsetY);
 }
@@ -666,8 +690,12 @@ List<_VectorPath> _transformPathsToSafeArea(
 
   return paths.map((path) {
     final points = path.points.map((point) {
-      final x = (point.x * transform.scale + transform.offsetX).clamp(minX, maxX).toDouble();
-      final y = (point.y * transform.scale + transform.offsetY).clamp(minY, maxY).toDouble();
+      final x = (point.x * transform.scale + transform.offsetX)
+          .clamp(minX, maxX)
+          .toDouble();
+      final y = (point.y * transform.scale + transform.offsetY)
+          .clamp(minY, maxY)
+          .toDouble();
       return _Point(x, y);
     }).toList(growable: false);
 
@@ -675,13 +703,17 @@ List<_VectorPath> _transformPathsToSafeArea(
   }).toList(growable: false);
 }
 
-List<_VectorPath> _optimizePaths(List<_VectorPath> input, {required _Point startPoint}) {
+List<_VectorPath> _optimizePaths(List<_VectorPath> input,
+    {required _Point startPoint}) {
   final paths = input
       .map((path) {
-        final points = _removeRedundantPoints(path.points, minDistance: _minPointDistanceMm);
-        return _VectorPath(points: points, closed: path.closed)..calculateLength();
+        final points = _removeRedundantPoints(path.points,
+            minDistance: _minPointDistanceMm);
+        return _VectorPath(points: points, closed: path.closed)
+          ..calculateLength();
       })
-      .where((path) => path.points.length >= 2 && path.lengthMm >= _minPathLengthMm)
+      .where((path) =>
+          path.points.length >= 2 && path.lengthMm >= _minPathLengthMm)
       .toList(growable: true);
 
   final ordered = <_VectorPath>[];
@@ -723,7 +755,15 @@ List<_VectorPath> _optimizePaths(List<_VectorPath> input, {required _Point start
   return ordered;
 }
 
-({String gcode, List<Map<String, dynamic>> segments, int commandCount, int segmentCount, double usedWidthMm, double usedHeightMm, bool truncated}) _generateGcode(
+({
+  String gcode,
+  List<Map<String, dynamic>> segments,
+  int commandCount,
+  int segmentCount,
+  double usedWidthMm,
+  double usedHeightMm,
+  bool truncated
+}) _generateGcode(
   List<_VectorPath> paths,
   ImageGcodeSettings settings,
 ) {
@@ -797,7 +837,8 @@ List<_VectorPath> _optimizePaths(List<_VectorPath> input, {required _Point start
   );
 }
 
-({double usedWidth, double usedHeight}) _segmentBounds(List<Map<String, dynamic>> segments, ImageGcodeSettings settings) {
+({double usedWidth, double usedHeight}) _segmentBounds(
+    List<Map<String, dynamic>> segments, ImageGcodeSettings settings) {
   if (segments.isEmpty) return (usedWidth: 0, usedHeight: 0);
 
   final xs = <double>[];
@@ -812,12 +853,17 @@ List<_VectorPath> _optimizePaths(List<_VectorPath> input, {required _Point start
   }
 
   return (
-    usedWidth: (xs.reduce(math.max) - xs.reduce(math.min)).clamp(0, settings.safeWidthMm).toDouble(),
-    usedHeight: (ys.reduce(math.max) - ys.reduce(math.min)).clamp(0, settings.safeHeightMm).toDouble(),
+    usedWidth: (xs.reduce(math.max) - xs.reduce(math.min))
+        .clamp(0, settings.safeWidthMm)
+        .toDouble(),
+    usedHeight: (ys.reduce(math.max) - ys.reduce(math.min))
+        .clamp(0, settings.safeHeightMm)
+        .toDouble(),
   );
 }
 
-_Point _roundedPoint(_Point point) => _Point(double.parse(_fmt(point.x)), double.parse(_fmt(point.y)));
+_Point _roundedPoint(_Point point) =>
+    _Point(double.parse(_fmt(point.x)), double.parse(_fmt(point.y)));
 
 bool _sameRoundedPoint(_Point? a, _Point b) {
   if (a == null) return false;

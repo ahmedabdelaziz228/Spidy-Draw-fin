@@ -154,16 +154,22 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: AppTheme.glowShadow,
                   ),
-                  child: const Icon(Icons.wifi_tethering_rounded, color: Colors.white, size: 28),
+                  child: const Icon(Icons.wifi_tethering_rounded,
+                      color: Colors.white, size: 28),
                 ),
                 const SizedBox(width: 14),
                 const Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('Connect to Robot', style: TextStyle(fontSize: 21, fontWeight: FontWeight.w900)),
+                      Text('Connect to Robot',
+                          style: TextStyle(
+                              fontSize: 21, fontWeight: FontWeight.w900)),
                       SizedBox(height: 3),
-                      Text('ESP32 direct mode', style: TextStyle(color: AppTheme.muted, fontWeight: FontWeight.w700)),
+                      Text('ESP32 direct mode',
+                          style: TextStyle(
+                              color: AppTheme.muted,
+                              fontWeight: FontWeight.w700)),
                     ],
                   ),
                 ),
@@ -191,16 +197,26 @@ class _ConnectionScreenState extends State<ConnectionScreen> {
               spacing: 8,
               runSpacing: 8,
               children: [
-                _QuickUrlChip(label: 'Default AP', url: AppConstants.defaultEspUrl, onTap: _useUrl),
-                _QuickUrlChip(label: 'Router 192.168.1.x', url: 'http://192.168.1.100', onTap: _useUrl),
-                _QuickUrlChip(label: 'Router 192.168.0.x', url: 'http://192.168.0.100', onTap: _useUrl),
+                _QuickUrlChip(
+                    label: 'Default AP',
+                    url: AppConstants.defaultEspUrl,
+                    onTap: _useUrl),
+                _QuickUrlChip(
+                    label: 'Router 192.168.1.x',
+                    url: 'http://192.168.1.100',
+                    onTap: _useUrl),
+                _QuickUrlChip(
+                    label: 'Router 192.168.0.x',
+                    url: 'http://192.168.0.100',
+                    onTap: _useUrl),
               ],
             ),
             const SizedBox(height: 18),
             const _ConnectionHint(
               icon: Icons.wifi_rounded,
               title: 'وصل الموبايل على Wi‑Fi بتاع الروبوت',
-              text: 'لو شغال Access Point استخدم غالبًا 192.168.4.1، ولو شغال على راوتر استخدم IP الظاهر في Serial Monitor.',
+              text:
+                  'لو شغال Access Point استخدم غالبًا 192.168.4.1، ولو شغال على راوتر استخدم IP الظاهر في Serial Monitor.',
             ),
             const SizedBox(height: 10),
             const _ConnectionHint(
@@ -270,14 +286,19 @@ class _BrandPanel extends StatelessWidget {
           const SizedBox(height: 14),
           const Text(
             'Mobile app for image capture, local G-code generation, safe-area calibration, and direct ESP32 control.',
-            style: TextStyle(color: AppTheme.muted, fontSize: 15, height: 1.55, fontWeight: FontWeight.w700),
+            style: TextStyle(
+                color: AppTheme.muted,
+                fontSize: 15,
+                height: 1.55,
+                fontWeight: FontWeight.w700),
           ),
           const SizedBox(height: 22),
           const Wrap(
             spacing: 10,
             runSpacing: 10,
             children: [
-              _FeatureBadge(icon: Icons.photo_camera_rounded, label: 'Image input'),
+              _FeatureBadge(
+                  icon: Icons.photo_camera_rounded, label: 'Image input'),
               _FeatureBadge(icon: Icons.code_rounded, label: 'Local G-code'),
               _FeatureBadge(icon: Icons.crop_free_rounded, label: 'Safe Area'),
               _FeatureBadge(icon: Icons.memory_rounded, label: 'ESP32'),
@@ -309,7 +330,9 @@ class _FeatureBadge extends StatelessWidget {
         children: [
           Icon(icon, color: AppTheme.primary, size: 17),
           const SizedBox(width: 7),
-          Text(label, textDirection: TextDirection.ltr, style: const TextStyle(fontWeight: FontWeight.w800)),
+          Text(label,
+              textDirection: TextDirection.ltr,
+              style: const TextStyle(fontWeight: FontWeight.w800)),
         ],
       ),
     );
@@ -317,7 +340,8 @@ class _FeatureBadge extends StatelessWidget {
 }
 
 class _QuickUrlChip extends StatelessWidget {
-  const _QuickUrlChip({required this.label, required this.url, required this.onTap});
+  const _QuickUrlChip(
+      {required this.label, required this.url, required this.onTap});
 
   final String label;
   final String url;
@@ -334,7 +358,8 @@ class _QuickUrlChip extends StatelessWidget {
 }
 
 class _ConnectionHint extends StatelessWidget {
-  const _ConnectionHint({required this.icon, required this.title, required this.text});
+  const _ConnectionHint(
+      {required this.icon, required this.title, required this.text});
 
   final IconData icon;
   final String title;
@@ -358,9 +383,15 @@ class _ConnectionHint extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.w900)),
+                Text(title,
+                    style: const TextStyle(fontWeight: FontWeight.w900)),
                 const SizedBox(height: 4),
-                Text(text, style: const TextStyle(color: AppTheme.muted, fontSize: 12.5, height: 1.45, fontWeight: FontWeight.w700)),
+                Text(text,
+                    style: const TextStyle(
+                        color: AppTheme.muted,
+                        fontSize: 12.5,
+                        height: 1.45,
+                        fontWeight: FontWeight.w700)),
               ],
             ),
           ),
