@@ -794,22 +794,7 @@ If the preview is too full/black, reduce Threshold or turn off Invert. If it is 
 
 # Spidy-Draw Delivery Notes
 
-هذه النسخة تم تجهيزها للتسليم السريع.
-
-## أهم إصلاح تم تطبيقه
-
-- تم إصلاح خطأ Flutter build في `app/lib/screens/dashboard_screen.dart`:
-  - كان المتغير `totalLines` مستخدم داخل كارت الـ Dashboard بدون تعريف.
-  - تم تعريفه من `_gcodeLines.length` داخل `_buildGraduationHero()`.
-
-## إصلاح اختبار البداية
-
-- تم تحديث `app/test/widget_test.dart` حتى:
-  - يجهز `SharedPreferences` في بيئة الاختبار.
-  - لا يعتمد على نص مطابق حرفيًا بينما عنوان الشاشة يحتوي على سطر جديد.
-  - يتأكد من ظهور شاشة الاتصال وحقل `ESP32 URL`.
-
-## أوامر التشغيل قبل التسليم
+## أوامر التشغيل
 
 افتح Terminal داخل فولدر `app` وشغل:
 
